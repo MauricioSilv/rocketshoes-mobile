@@ -28,13 +28,13 @@ import {
 
 import { formatPrice } from '../../util/format';
 
-function Cart({ cart, total, removeFromCart, updateAmount }) {
+function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
   function increment(item) {
-    updateAmount(item.id, item.amount + 1);
+    updateAmountRequest(item.id, item.amount + 1);
   }
 
   function decrement(item) {
-    updateAmount(item.id, item.amount - 1);
+    updateAmountRequest(item.id, item.amount - 1);
   }
 
   const renderCartItems = item => (
