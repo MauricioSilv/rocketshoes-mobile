@@ -70,5 +70,6 @@ export const ButtonText = styled.Text`
 
 export const Amount = styled.Text`
   color: #fff;
+  margin-left: 5px;
   font-size: 14px;
 `;
