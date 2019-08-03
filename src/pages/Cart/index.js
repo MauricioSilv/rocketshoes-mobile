@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import * as CartActions from '../../store/modules/cart/actions';
 import {
   Container,
   CartWrapper,
@@ -24,7 +26,7 @@ import {
   EmptyCartText,
 } from './styles';
 
-function Cart({ cart, dispatch }) {
+function Cart({ cart, removeFromCart }) {
   const renderCartItems = item => (
     <CartItem>
       <MainContent>
@@ -33,9 +35,7 @@ function Cart({ cart, dispatch }) {
           <ProductTitle> {item.title} </ProductTitle>
           <ProductValue>{item.priceFormated}</ProductValue>
         </Description>
-        <TouchableOpacity
-          onPress={() => dispatch({ type: 'REMOVE_FROM_CART', id: item.id })}
-        >
+        <TouchableOpacity onPress={() => removeFromCart(item.id)}>
           <Icon color="#7159c1" name="close" size={24} />
         </TouchableOpacity>
       </MainContent>
@@ -55,7 +55,6 @@ function Cart({ cart, dispatch }) {
   );
   function renderContent() {
     if (cart.length > 0) {
-      console.tron.log(cart);
       return (
         <CartWrapper>
           <CartItemsList
@@ -87,4 +86,10 @@ const mapStateToProps = state => ({
   cart: state.cart,
 });
 
-export default connect(mapStateToProps)(Cart);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(CartActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cart);
