@@ -26,7 +26,15 @@ import {
   EmptyCartText,
 } from './styles';
 
-function Cart({ cart, removeFromCart }) {
+function Cart({ cart, removeFromCart, updateAmount }) {
+  function increment(item) {
+    updateAmount(item.id, item.amount + 1);
+  }
+
+  function decrement(item) {
+    updateAmount(item.id, item.amount - 1);
+  }
+
   const renderCartItems = item => (
     <CartItem>
       <MainContent>
@@ -41,11 +49,11 @@ function Cart({ cart, removeFromCart }) {
       </MainContent>
       <CartItemFooter>
         <AmountSelector>
-          <TouchableOpacity onPress="">
+          <TouchableOpacity onPress={() => decrement(item)}>
             <Icon color="#7159c1" name="remove-circle-outline" size={24} />
           </TouchableOpacity>
           <AmountInput readOnly value={String(item.amount)} />
-          <TouchableOpacity onPress="">
+          <TouchableOpacity onPress={() => increment(item)}>
             <Icon color="#7159c1" name="add-circle-outline" size={24} />
           </TouchableOpacity>
         </AmountSelector>
