@@ -26,7 +26,9 @@ import {
   EmptyCartText,
 } from './styles';
 
-function Cart({ cart, removeFromCart, updateAmount }) {
+import { formatPrice } from '../../util/format';
+
+function Cart({ cart, total, removeFromCart, updateAmount }) {
   function increment(item) {
     updateAmount(item.id, item.amount + 1);
   }
@@ -57,7 +59,7 @@ function Cart({ cart, removeFromCart, updateAmount }) {
             <Icon color="#7159c1" name="add-circle-outline" size={24} />
           </TouchableOpacity>
         </AmountSelector>
-        <SubTotalCartValue />
+        <SubTotalCartValue>{item.subtotal}</SubTotalCartValue>
       </CartItemFooter>
     </CartItem>
   );
@@ -72,7 +74,7 @@ function Cart({ cart, removeFromCart, updateAmount }) {
           />
           <View>
             <FooterTitle>Total</FooterTitle>
-            <TotalValue />
+            <TotalValue>{total}</TotalValue>
             <FinishButton>
               <FinishButtonText>Finalizar pedido</FinishButtonText>
             </FinishButton>
@@ -91,7 +93,15 @@ function Cart({ cart, removeFromCart, updateAmount }) {
 }
 
 const mapStateToProps = state => ({
-  cart: state.cart,
+  cart: state.cart.map(item => ({
+    ...item,
+    subtotal: formatPrice(item.price * item.amount),
+  })),
+  total: formatPrice(
+    state.cart.reduce((total, item) => {
+      return total + item.price * item.amount;
+    }, 0)
+  ),
 });
 
 const mapDispatchToProps = dispatch =>
