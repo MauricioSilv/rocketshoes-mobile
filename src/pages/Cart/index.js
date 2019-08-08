@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as CartActions from '../../store/modules/cart/actions';
@@ -28,13 +27,30 @@ import {
 
 import { formatPrice } from '../../util/format';
 
-function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
+export default function Cart() {
+  const total = useSelector(state =>
+    formatPrice(
+      state.cart.reduce((totalSum, item) => {
+        return totalSum + item.price * item.amount;
+      }, 0)
+    )
+  );
+
+  const cart = useSelector(state =>
+    state.cart.map(item => ({
+      ...item,
+      subtotal: formatPrice(item.price * item.amount),
+    }))
+  );
+
+  const dispatch = useDispatch();
+
   function increment(item) {
-    updateAmountRequest(item.id, item.amount + 1);
+    dispatch(CartActions.updateAmountRequest(item.id, item.amount + 1));
   }
 
   function decrement(item) {
-    updateAmountRequest(item.id, item.amount - 1);
+    dispatch(CartActions.updateAmountRequest(item.id, item.amount - 1));
   }
 
   const renderCartItems = item => (
@@ -45,7 +61,9 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
           <ProductTitle> {item.title} </ProductTitle>
           <ProductValue>{item.priceFormated}</ProductValue>
         </Description>
-        <TouchableOpacity onPress={() => removeFromCart(item.id)}>
+        <TouchableOpacity
+          onPress={() => dispatch(CartActions.removeFromCart(item.id))}
+        >
           <Icon color="#7159c1" name="close" size={24} />
         </TouchableOpacity>
       </MainContent>
@@ -91,23 +109,3 @@ function Cart({ cart, total, removeFromCart, updateAmountRequest }) {
   }
   return <Container>{renderContent()}</Container>;
 }
-
-const mapStateToProps = state => ({
-  cart: state.cart.map(item => ({
-    ...item,
-    subtotal: formatPrice(item.price * item.amount),
-  })),
-  total: formatPrice(
-    state.cart.reduce((total, item) => {
-      return total + item.price * item.amount;
-    }, 0)
-  ),
-});
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(CartActions, dispatch);
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Cart);
