@@ -1,10 +1,12 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { CartSize } from './styles';
 
-function HeaderRight({ navigation, cartSize }) {
+export default function HeaderRight({ navigation }) {
+  const cartSize = useSelector(state => state.cart.length);
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate('Cart')}
@@ -21,6 +23,8 @@ function HeaderRight({ navigation, cartSize }) {
   );
 }
 
-export default connect(state => ({
-  cartSize: state.cart.length,
-}))(HeaderRight);
+HeaderRight.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
