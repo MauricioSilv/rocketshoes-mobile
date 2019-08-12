@@ -1,8 +1,8 @@
 import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import { TouchableOpacity } from 'react-native';
-import HeaderRight from './components/HeaderRight';
 import HeaderLeft from './components/HeaderLeft';
+import HeaderRight from './components/HeaderRight';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 

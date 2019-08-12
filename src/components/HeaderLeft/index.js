@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image } from 'react-native';
 
-import logo from '../assets/images/logo.png';
+import logo from '../../assets/images/logo.png';
 
 export default function Container() {
   return (

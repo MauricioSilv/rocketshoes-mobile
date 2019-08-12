@@ -11,7 +11,6 @@ import {
   FinishButton,
   FinishButtonText,
   CartItemsList,
-  CartItem,
   MainContent,
   ProductImage,
   Description,
@@ -54,7 +53,7 @@ export default function Cart() {
   }
 
   const renderCartItems = item => (
-    <CartItem>
+    <View>
       <MainContent>
         <ProductImage source={{ uri: item.image }} />
         <Description>
@@ -79,7 +78,7 @@ export default function Cart() {
         </AmountSelector>
         <SubTotalCartValue>{item.subtotal}</SubTotalCartValue>
       </CartItemFooter>
-    </CartItem>
+    </View>
   );
   function renderContent() {
     if (cart.length > 0) {
